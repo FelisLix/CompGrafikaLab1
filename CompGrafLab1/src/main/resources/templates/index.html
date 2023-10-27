@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LAB1</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/dist/css/bootstrap.css}">
+</head>
+<body>
+
+<div class="d-grid gap-lg-3 col-10 mx-auto text-center">
+    <label></label>
+    <label>Лабораторна робота №1</label>
+    <span class="display-6">Побудування графіків функцій</span>
+    <label>Створити програму зі зручним інтерфейсом користувача, що буде реалізовувати можливість побудови графіка функції відповідно до варіанта завдання.</label>
+    <label>Варіант 4</label>
+    <label>y = (1 + 0.55 * x * x) / (1.5 + sqrt(0.2 + x * x))</label>
+    <label></label>
+<form method="post" action="show_data">
+    <div class="row">
+        <div class="col">
+            <input type="text" id="x1" name="x1"  class="form-control" placeholder="ВІД">
+        </div>
+        <div class="col">
+            <input type="text" id="x2" name="x2" class="form-control" placeholder="ДО">
+        </div>
+        <div class="col">
+            <input type="text" id="step" name="step" class="form-control" placeholder="КРОК">
+        </div>
+        <div class="col">
+            <input type="submit" class="btn btn-sm btn-outline-dark" value="ПОКАЗАТИ ГРАФІК">
+        </div>
+    </div>
+</form>
+<canvas></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const createLineChart = (xData, yData) => {
+        let data = {
+            labels: xData,
+            datasets:[{
+                data: yData,
+                pointStyle: false,
+                borderColor: 'rgba(119, 110, 162, 1)',
+            }]
+        }
+        let xScaleConfig = {
+            display: true,
+            title: {
+                display: true,
+                text: 'X'
+            },
+            ticks:{
+                autoSkip: true,
+                maxRotation: 0,
+            },
+            border: {
+                color: 'rgba(204,255,0,1)',
+                width: 2,
+            },
+            grid:{
+                color: 'rgba(219,211,255,1)',
+            }
+        }
+        let yScaleConfig = {
+            display: true,
+            title: {
+                display: true,
+                text: 'Y'
+            },
+            border: {
+                color: 'rgba(204,255,0,1)',
+                width: 2,
+            },
+            grid:{
+                color: 'rgba(219,211,255,1)',
+            }
+        }
+        let config = {
+            type: 'line',
+            data: data,
+            options: {
+                scales:{
+                    x: xScaleConfig,
+                    y: yScaleConfig
+                },
+                plugins:{
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        }
+        let chart = new Chart(context, config);
+    }
+    let canvas = window.document.querySelector('canvas');
+    let context = canvas.getContext('2d');
+    let xData = [[${xData}]];
+    xData = xData.map(value => parseFloat(value.toFixed(1)));
+    let yData = [[${yData}]];
+    createLineChart(xData, yData);
+</script>
+<script th:src="@{webjars/jquery/3.7.0/dist/jquery.js}"></script>
+<script th:src="@{webjars/popperjs__core/2.11.8/dist/umd/popper.js}"></script>
+<script th:src="@{webjars/bootstrap/5.3.0/dist/js/bootstrap.bundle.js}"></script>
+</body>
+</html>
